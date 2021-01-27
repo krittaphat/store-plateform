@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Coding Platform</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+    <style>
+        .sidebar .nav-link.active {
+            color: #007bff;
+        }
+        
+        .sidebar .nav-link {
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .nav-link {
+            display: block;
+            padding: .5rem 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-dark bg-dark sticky-top">
+        <span class="navbar-brand mb-0 h1">Welcome To Coding Platform</span>
+    </nav>
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-2 d-none d-md-block bg-light sidebar pt-5">
+                <div class="sidebar-sticky">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="./index.html">
+                                <span data-feather="home"></span> หน้าหลัก </span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="./store.html">
+                                <span data-feather="file"></span> ร้านค้า<span class="sr-only"></span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="./product.html">
+                                <span data-feather="shopping-cart"></span>สินค้า
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+                <h2>ร้านค้าทั้งหมด</h2>
+                <div class="row pt-3">
+                    <div class="col">
+                        <button id="btnCreateStore" class="btn btn-success" data-target="#modalCreateStore" data-toggle="modal">สร้างร้านค้า</button>
+                    </div>
+                </div>
+                <div class="table-responsive pt-3">
+                    <table id="tableStore" class="table table-striped table-bordered" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>รหัสร้านค้า</th>
+                                <th>ชื่อร้านค้า</th>
+                                <th>คำอธิบายร้านค้า</th>
+                                <th>เบอร์ติดต่อร้านค้า</th>
+                                <th>ที่อยู่</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </main>
+        </div>
+    </div>
+    <div id="modalCreateStore" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">สร้างร้านค้า</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="p-3">
+                        <form>
+                            <div class="form-group">
+                                <label for="storeName">ชื่อร้านค้า<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="storeName" placeholder="" maxlength="50" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="storeDetail">คำอธิบายร้านค้า<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="storeDetail" placeholder="" maxlength="100" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="tel">เบอร์ติดต่อร้านค้า<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="tel" placeholder="" maxlength="10" oninput="regexpNumber('tel')" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="address">ที่อยู่ <span class="text-danger">*</span></label>
+                                <textarea class="form-control" id="address" rows="4" maxlength="255" required></textarea>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <button id="btnCloseStore" type="button" class="btn btn-secondary me-2" data-dismiss="modal">Close</button>
+                                <button id="btnSaveStore" type="button" class="btn btn-primary ml-2" onclick="handleSaveStore()">Save</button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="modalEditStore" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+        <input type="hidden" id="hiddenStoreId">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">แก้ไขร้านค้า</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="p-3">
+                        <form>
+                            <div class="form-group">
+                                <label for="storeNameEdit">ชื่อร้านค้า<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="storeNameEdit" placeholder="" maxlength="50" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="storeDetailEdit">คำอธิบายร้านค้า<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="storeDetailEdit" placeholder="" maxlength="100" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="telEdit">เบอร์ติดต่อร้านค้า<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="telEdit" placeholder="" maxlength="10" oninput="regexpNumber('tel')" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="addressEdit">ที่อยู่ <span class="text-danger">*</span></label>
+                                <textarea class="form-control" id="addressEdit" rows="4" maxlength="255" required></textarea>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <button id="btnDeleteStore" type="button" class="btn btn-danger me-2" onclick="handleDeleteStore()">Delete</button>
+                                <button id="btnCloseUpdateStore" type="button" class="btn btn-secondary me-2 ml-2" data-dismiss="modal">Close</button>
+                                <button id="btnUpdateStore" type="button" class="btn btn-primary ml-2" onclick="handleUpdateStore()">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/assets/jQuery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="/assets/dataTable.min.js"></script>
+    <script src="/assets/dataTables.bootstrap4.min.js"></script>
+    <script src="/js/common.js"></script>
+    <script src="/js/index.js"></script>
+    <script src="/js/store.js"></script>
+</body>
+
+</html>
